@@ -2,7 +2,7 @@
 
 ## How to use
 
-Download the example [or clone the repo](https://github.com/pixelbuildlab/student-management):
+Download the project [or clone the repo](https://github.com/pixelbuildlab/student-management):
 
 <!-- #default-branch-switch -->
 
