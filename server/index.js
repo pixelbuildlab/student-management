@@ -21,14 +21,17 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json());
-app.use(cookieParser());
-app.use(setupSession());
-app.use(setLastActiveTime);
-app.use(verifySession);
+app.get("/", (req, res) => {
+  res.send("Express on Vercel");
+});
+// app.use(express.json());
+// app.use(cookieParser());
+// app.use(setupSession());
+// app.use(setLastActiveTime);
+// app.use(verifySession);
 
-app.use("/api/students/", studentsRoutes);
-app.use("/api/user/", userRoutes);
+// app.use("/api/students/", studentsRoutes);
+// app.use("/api/user/", userRoutes);
 
 mongoose.connect(mongoDB_URL, {}).then(() => {
   console.log("MONGOOSE FIRED UP");
@@ -36,3 +39,5 @@ mongoose.connect(mongoDB_URL, {}).then(() => {
     console.log("SERVER IS RUNNING AT:" + serverPort)
   );
 });
+
+module.exports = app;
