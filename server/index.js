@@ -32,12 +32,12 @@ app.get("/", (req, res) => {
 
 // app.use("/api/students/", studentsRoutes);
 // app.use("/api/user/", userRoutes);
-
-mongoose.connect(mongoDB_URL, {}).then(() => {
-  console.log("MONGOOSE FIRED UP");
-  app.listen(serverPort, () =>
-    console.log("SERVER IS RUNNING AT:" + serverPort)
-  );
-});
+app.listen(serverPort, () => console.log("SERVER IS RUNNING AT:" + serverPort));
+// mongoose.connect(mongoDB_URL, {}).then(() => {
+//   console.log("MONGOOSE FIRED UP");
+//   app.listen(serverPort, () =>
+//     console.log("SERVER IS RUNNING AT:" + serverPort)
+//   );
+// });
 
 module.exports = app;
