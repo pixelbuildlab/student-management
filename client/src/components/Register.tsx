@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography'
 import useInput from '../hooks/useInput'
 import {
   validateEmailInput,
+  validateNameCityInput,
   validatePasswordInput,
 } from '../utils/validationProvider'
 import axios from 'axios'
@@ -19,41 +20,24 @@ import { useRouter } from 'next/router'
 import Spinner from './Spinner/Spinner'
 import useAuthProvider from '../hooks/authProvider/useAuthProvider'
 import Head from 'next/head'
+import { Copyright } from './SigninUi'
 
-export function Copyright(props: any) {
-  return (
-    <Typography
-      variant='body2'
-      color='text.secondary'
-      align='center'
-      {...props}
-    >
-      {'Copyright © '}
-      <Link
-        color='inherit'
-        href='#'
-      >
-        Student Administration
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  )
-}
-
-export default function SignInUi() {
+export default function Register() {
   const router = useRouter()
   const { isAuth, jsonAuthData } = useAuthProvider('userData', false)
   if (isAuth || jsonAuthData) {
     router.push('/dashboard')
   }
   const email = useInput('', validateEmailInput)
+  const username = useInput('', (v) => '')
   const password = useInput('', validatePasswordInput)
   const [authError, setAuthError] = React.useState('')
   const [isLoading, setIsLoading] = React.useState(false)
+
   const [isFilled, setIsFilled] = React.useState({
     email: false,
     password: false,
+    username: false,
   })
   // console.log(localStorage.getItem("userData"));
 
@@ -65,18 +49,20 @@ export default function SignInUi() {
     const userData = {
       email: data.get('email'),
       password: data.get('password'),
+      username: data.get('username'),
     }
 
     try {
       const resp = await axios.post(
-        `${process.env.API_URL}/user/auth`,
+        `${process.env.API_URL}/user/register`,
         userData,
         {
           withCredentials: true,
         }
       )
+      console.log('res[', resp)
 
-      if (resp.status === 200) {
+      if (resp.status === 201) {
         localStorage.setItem('userData', JSON.stringify(resp.data))
         router.push('/dashboard')
       }
@@ -88,7 +74,11 @@ export default function SignInUi() {
   }
 
   const validateForm = () => {
-    return email.error.length !== 0 || password.error.length !== 0
+    return (
+      email.error.length !== 0 ||
+      password.error.length !== 0 ||
+      username.error.length !== 0
+    )
   }
 
   const isFormValid = validateForm()
@@ -154,7 +144,7 @@ export default function SignInUi() {
               component='h1'
               variant='h5'
             >
-              Sign in
+              Register
             </Typography>
             <Box
               component='form'
@@ -189,6 +179,25 @@ export default function SignInUi() {
                 autoFocus
               />
               <TextField
+                error={username.error !== ''}
+                helperText={username.error}
+                onBlur={(e) => {
+                  if (e.target.value.length !== 0) {
+                    setIsFilled({ ...isFilled, username: true })
+                  }
+                }}
+                value={username.value}
+                onChange={username.onChange}
+                margin='normal'
+                required
+                fullWidth
+                id='username'
+                label='Username'
+                name='username'
+                autoComplete='username'
+                autoFocus
+              />
+              <TextField
                 margin='normal'
                 required
                 fullWidth
@@ -219,7 +228,7 @@ export default function SignInUi() {
                 sx={{ mt: 3, mb: 2 }}
                 disabled={!isFilled.email || !isFilled.password || isFormValid}
               >
-                Sign In
+                Register
               </Button>
               <Grid container>
                 <Grid
@@ -235,10 +244,10 @@ export default function SignInUi() {
                 </Grid>
                 <Grid item>
                   <Link
-                    href='/register'
+                    href='/login'
                     variant='body2'
                   >
-                    {"Don't have an account? Sign Up"}
+                    {'Already have an account? Login'}
                   </Link>
                 </Grid>
               </Grid>
