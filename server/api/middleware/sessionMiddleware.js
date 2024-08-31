@@ -1,6 +1,10 @@
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+import config from '../config.js'
+
+dotenv.config()
 
 const mongoStore = MongoStore.create({
   mongoUrl: process.env.mongoDB_URL,

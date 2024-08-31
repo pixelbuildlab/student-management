@@ -1,6 +1,8 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
 import mongoose from 'mongoose'
 import express from 'express'
-import dotenv from 'dotenv'
 import cors from 'cors'
 import userRoutes from './routes/userRouters.js'
 import studentsRoutes from './routes/studentsRouters.js'
@@ -10,7 +12,6 @@ import {
   setupSession,
   verifySession,
 } from './middleware/sessionMiddleware.js'
-dotenv.config()
 const serverPort = process.env.PORT || 4000
 const mongoDB_URL = process.env.mongoDB_URL
 const whitelist = [
@@ -19,6 +20,7 @@ const whitelist = [
   'https://student-management-xi-green.vercel.app/',
 ]
 const app = express()
+
 app.use(
   cors({
     origin: function (origin, callback) {
