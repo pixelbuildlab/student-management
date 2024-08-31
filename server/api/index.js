@@ -22,6 +22,7 @@ const app = express()
 app.use(
   cors({
     origin: function (origin, callback) {
+      console.log(origin)
       if (whitelist.indexOf(origin) !== -1) {
         callback(null, true)
       } else {
@@ -53,4 +54,4 @@ mongoose.connect(mongoDB_URL, {}).then(() => {
   )
 })
 
-export { app }
+export default app
