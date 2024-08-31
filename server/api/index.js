@@ -13,12 +13,20 @@ import {
 dotenv.config()
 const serverPort = process.env.PORT || 4000
 const mongoDB_URL = process.env.mongoDB_URL
-
+const whitelist = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'https://student-management-xi-green.vercel.app/',
+]
 const app = express()
 app.use(
   cors({
-    origin: (origin, callback) => {
-      callback(null, origin || '*')
+    origin: function (origin, callback) {
+      if (whitelist.indexOf(origin) !== -1) {
+        callback(null, true)
+      } else {
+        callback(new Error('Not allowed by CORS'))
+      }
     },
     credentials: true,
   })
